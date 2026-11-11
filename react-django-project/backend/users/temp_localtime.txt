@@ -1,0 +1,30 @@
+365:    now_local = timezone.localtime(timezone.now())
+701:                """, (project, subproject, f.name, str(file_path), page_count, timezone.localtime(timezone.now())))
+751:                        row_dict['uploaded_at'] = timezone.localtime(row_dict['uploaded_at']).strftime("%Y-%m-%d %H:%M")
+909:                    row_dict['uploaded_at'] = timezone.localtime(row_dict['uploaded_at']).strftime("%m-%d-%Y %H:%M")
+1061:                        row[k] = timezone.localtime(v).strftime("%Y-%m-%d %H:%M:%S")
+1112:                (timezone.localtime(timezone.now()), chart_id)
+1201:                        timezone.localtime(timezone.now()), timezone.localtime(timezone.now()), chart_id
+1250:                        ld[k] = timezone.localtime(ld[k]).strftime("%m-%d-%Y %H:%M:%S")
+1509:                """, (chart_id, project_val, subproject_val, auditor_id, timezone.localtime(timezone.now())))
+1517:            """, (timezone.localtime(timezone.now()), chart_id))
+1558:                        json.dumps({"action": "update_state", "state": state}), timezone.localtime(timezone.now())
+1593:                            json.dumps({"action": "added"}), timezone.localtime(timezone.now())
+1645:                            json.dumps(changes), timezone.localtime(timezone.now())
+1708:                                    json.dumps(row_changes), timezone.localtime(timezone.now())
+1779:                            timezone.localtime(timezone.now()), data.get("chart_status"),
+1781:                            timezone.localtime(timezone.now()),
+1873:                                ld[k] = timezone.localtime(ld[k]).strftime("%m-%d-%Y %H:%M:%S")
+1910:                                ald[k] = timezone.localtime(ald[k]).strftime("%m-%d-%Y %H:%M:%S")
+3326:            val_local = timezone.localtime(val) if isinstance(val, datetime.datetime) and timezone.is_aware(val) else val
+3918:            val_local = timezone.localtime(val) if isinstance(val, datetime.datetime) and timezone.is_aware(val) else val
+4646:        filename_time = timezone.localtime(timezone.now()).strftime("%Y%m%d_%H%M%S")
+4844:                """, (chart_id, project_val, subproject_val, auditor_id, timezone.localtime(timezone.now())))
+4852:            """, (timezone.localtime(timezone.now()), chart_id))
+4894:                        json.dumps({"action": "update_state", "state": state}), timezone.localtime(timezone.now())
+4929:                            json.dumps({"action": "added"}), timezone.localtime(timezone.now())
+4981:                            json.dumps(changes), timezone.localtime(timezone.now())
+5044:                                    json.dumps(row_changes), timezone.localtime(timezone.now())
+5115:                            timezone.localtime(timezone.now()), data.get("chart_status"),
+5208:                                ld[k] = timezone.localtime(ld[k]).strftime("%m-%d-%Y %H:%M:%S")
+5245:                                sld[k] = timezone.localtime(sld[k]).strftime("%m-%d-%Y %H:%M:%S")

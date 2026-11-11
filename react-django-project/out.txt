@@ -1,0 +1,3 @@
+VDIR "medical/" (physicalPath:C:\inetpub\wwwroot\reactapp)
+VDIR "medical/media" (physicalPath:C:\reactjs\react-django-project\backend\media)
+VDIR "medical/static" (physicalPath:C:\reactjs\react-django-project\backend\staticfiles)

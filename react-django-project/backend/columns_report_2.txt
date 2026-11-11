@@ -1,0 +1,12 @@
+Table: audit_dx_entries
+Columns: id, chart_id, from_date, to_date, start_page, end_page, dxcode, details, provider, eo, pos, dx_location, meat_dec, error_type, error_count, error_command, state, user_action, parent_id
+
+Table: at_audit_dx_entries
+Columns: id, chart_id, from_date, to_date, start_page, end_page, dxcode, details, provider, eo, error_type, error_command, created_at, dx_location, pos, parent_id, user_action, user_action_command, user_tl_action, user_tl_action_command, audit_tl_action, audit_tl_action_command, error_count, meat_dec
+
+Table: audit_errors
+Columns: id, chart_id, row_id, error_type, error_count, error_command, changes, created_at
+
+Table: at_audit_errors
+Columns: id, chart_id, row_id, error_type, error_count, error_command, changes, created_at
+

@@ -1,0 +1,27 @@
+{
+    "codings": [
+        {
+            "chart_id": "29169809",
+            "chart_status": "complete",
+            "user_id": "VN20",
+            "project": "Batch VN' AVIX_APN 2026",
+            "subproject": "New Member"
+        }
+    ],
+    "audit_allocations": [
+        {
+            "chart_id": "29169809",
+            "chart_status": "complete",
+            "auditor_id": "MLV1254"
+        }
+    ],
+    "at_audit_allocations": [
+        {
+            "chart_id": "29169809",
+            "chart_status": "complete",
+            "at_auditor_id": "MLV1162"
+        }
+    ],
+    "audit_errors_count": 8,
+    "at_audit_errors_count": 0
+}

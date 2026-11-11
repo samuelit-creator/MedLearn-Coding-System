@@ -1,0 +1,3 @@
+Database Total Errors: 12443
+UI Expected Disagreements: 154 (Audit: 154, AT-Audit: 0)
+Divergence confirmed: UI shows 154 vs Export shows 12443

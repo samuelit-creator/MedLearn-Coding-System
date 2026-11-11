@@ -1,0 +1,3 @@
+Database Total Errors: 12443 (Audit: 12220, AT-Audit: 223)
+SQL Logic Total: 12443 (Audit: 12220, AT-Audit: 223)
+MATCH SUCCESS: Export will include 100% of database records.

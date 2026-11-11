@@ -1,0 +1,42 @@
+CODINGS COLUMNS:
+  id (int)
+  chart_id (nvarchar)
+  project (nvarchar)
+  subproject (nvarchar)
+  from_date (date)
+  to_date (date)
+  start_page (int)
+  end_page (int)
+  eo (nvarchar)
+  chart_status (nvarchar)
+  reject_reason (nvarchar)
+  reject_command (nvarchar)
+  date (date)
+  start_time (time)
+  end_time (time)
+  user_id (nvarchar)
+  pdf_path (nvarchar)
+  provider (nvarchar)
+  dxcode (nvarchar)
+  details (nvarchar)
+  complete_command (nvarchar)
+  pdf_path_hash (binary)
+  project_pdf_id (int)
+
+Rows with NULL project_pdf_id: 204
+Total rows in project_pdfs: 12
+
+Projects/Subprojects in project_pdfs:
+  ('AVIX_APN', 'NewMember')
+
+All PDFs in project_pdfs (first 10):
+  (33, 'AVIX_APN', 'NewMember')
+  (34, 'AVIX_APN', 'NewMember')
+  (35, 'AVIX_APN', 'NewMember')
+  (36, 'AVIX_APN', 'NewMember')
+  (37, 'AVIX_APN', 'NewMember')
+  (38, 'AVIX_APN', 'NewMember')
+  (39, 'AVIX_APN', 'NewMember')
+  (40, 'AVIX_APN', 'NewMember')
+  (41, 'AVIX_APN', 'NewMember')
+  (42, 'AVIX_APN', 'NewMember')

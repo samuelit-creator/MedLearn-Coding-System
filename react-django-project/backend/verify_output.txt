@@ -1,0 +1,11 @@
+--- Verifying audit_open_chart_api for chart_id 20659705 ---
+Traceback (most recent call last):
+Status Code: 500
+Failure: API returned 500
+Response Content: {"error": "localtime() cannot be applied to a naive datetime"}
+  File "c:\reactjs\react-django-project\backend\users\views.py", line 1640, in audit_open_chart_api
+    ld[k] = timezone.localtime(ld[k]).strftime("%m-%d-%Y %H:%M:%S")
+            ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\reactjs\react-django-project\backend\venv\Lib\site-packages\django\utils\timezone.py", line 183, in localtime
+    raise ValueError("localtime() cannot be applied to a naive datetime")
+ValueError: localtime() cannot be applied to a naive datetime

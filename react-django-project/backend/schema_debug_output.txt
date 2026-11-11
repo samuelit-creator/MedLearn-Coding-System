@@ -1,0 +1,31 @@
+--- Columns in 'codings' ---
+id: int
+chart_id: nvarchar
+project: nvarchar
+subproject: nvarchar
+from_date: date
+to_date: date
+start_page: int
+end_page: int
+eo: nvarchar
+chart_status: nvarchar
+reject_reason: nvarchar
+reject_command: nvarchar
+date: date
+start_time: time
+end_time: time
+user_id: nvarchar
+pdf_path: nvarchar
+provider: nvarchar
+dxcode: nvarchar
+details: nvarchar
+complete_command: nvarchar
+pdf_path_hash: binary
+project_pdf_id: int
+created_at: datetime2
+
+--- Columns in 'uq_user_pdf' ---
+user_id
+pdf_path_hash
+
+--- Triggers on 'codings' ---

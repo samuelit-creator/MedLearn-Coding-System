@@ -1,0 +1,3 @@
+CODINGS: chart_id, chart_status, complete_command, created_at, date, details, dxcode, end_page, end_time, eo, from_date, id, pdf_path, pdf_path_hash, project, project_pdf_id, provider, reject_command, reject_reason, start_page, start_time, subproject, to_date, user_id
+AUDIT_ALLOCATIONS: allocated_at, auditor_id, chart_id, chart_status, complete_command, end_time, id, project, reject_command, reject_reason, start_time, subproject
+AT_AUDIT_ALLOCATIONS: allocated_at, at_auditor_id, chart_id, chart_status, complete_command, end_time, id, project, reject_command, reject_reason, start_time, subproject

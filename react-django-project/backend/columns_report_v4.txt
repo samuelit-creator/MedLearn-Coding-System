@@ -1,0 +1,3 @@
+DX_ENTRIES: chart_id, created_at, details, dx_location, dxcode, end_page, eo, from_date, id, meat_dec, pos, provider, start_page, to_date
+AUDIT_DX_ENTRIES: chart_id, details, dx_location, dxcode, end_page, eo, error_command, error_count, error_type, from_date, id, meat_dec, parent_id, pos, provider, start_page, state, to_date, user_action
+AT_AUDIT_DX_ENTRIES: audit_tl_action, audit_tl_action_command, chart_id, created_at, details, dx_location, dxcode, end_page, eo, error_command, error_count, error_type, from_date, id, meat_dec, parent_id, pos, provider, start_page, to_date, user_action, user_action_command, user_tl_action, user_tl_action_command

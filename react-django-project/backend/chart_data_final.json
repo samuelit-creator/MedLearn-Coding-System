@@ -1,0 +1,24 @@
+{
+    "codings": [
+        {
+            "chart_id": "44189294",
+            "chart_status": "complete",
+            "user_id": "MLV1750",
+            "project": "AVIX_APN",
+            "subproject": "AVIX_ACA",
+            "date": null,
+            "created_at": "2026-03-04 09:10:36.476305"
+        }
+    ],
+    "audit_allocations": [
+        {
+            "chart_id": "44189294",
+            "chart_status": "in_progress",
+            "auditor_id": "MLV1121",
+            "project": "AVIX_APN",
+            "subproject": "AVIX_ACA",
+            "allocated_at": "2026-03-05 10:57:32.256419"
+        }
+    ],
+    "at_audit_allocations": []
+}

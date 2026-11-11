@@ -1,0 +1,5 @@
+Total entries in at_audit_errors: 223
+After JOIN at_audit_dx_entries: 216
+After JOIN codings: 216
+After JOIN audit_allocations: 216
+After JOIN at_audit_allocations: 216

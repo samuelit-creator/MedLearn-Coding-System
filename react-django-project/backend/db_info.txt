@@ -1,0 +1,11 @@
+COLUMNS:
+  id (int)
+  project (nvarchar)
+  subproject (nvarchar)
+  file_name (nvarchar)
+  file_path (nvarchar)
+  uploaded_at (datetime2)
+
+ROWS:
+{'id': 33, 'project': 'AVIX_APN', 'subproject': 'NewMember', 'file_name': '9876667.pdf', 'file_path': 'C:\\reactjs\\react-django-project\\backend\\media\\pdfs\\9876667.pdf', 'uploaded_at': datetime.datetime(2026, 2, 10, 13, 51, 56, 337000)}
+{'id': 34, 'project': 'AVIX_APN', 'subproject': 'NewMember', 'file_name': '3102446_C4067826601_WILLIAM _RUSH_06221962_064051 (1).pdf', 'file_path': 'C:\\reactjs\\react-django-project\\backend\\media\\pdfs\\3102446_C4067826601_WILLIAM _RUSH_06221962_064051 (1).pdf', 'uploaded_at': datetime.datetime(2026, 2, 10, 13, 51, 56, 343000)}

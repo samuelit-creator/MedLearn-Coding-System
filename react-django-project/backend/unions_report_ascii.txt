@@ -1,0 +1,726 @@
+--- UNION ALL at line 1999 ---
+1989: 
+1990: SUM(COALESCE(p.page_count, 0)) AS total_pages_sum,
+1991: 
+1992: MAX(c.allocated_at) AS last_chart_date
+1993: 
+1994: FROM user_details u
+1995: 
+1996: LEFT JOIN user_details tl
+1997: ON tl.user_employee_id = u.tl_employee_id
+1998: 
+1999: -- UNION ALL for audit_allocations + at_audit_allocations
+2000: LEFT JOIN (
+2001: SELECT chart_id, auditor_id, chart_status, allocated_at FROM audit_allocations
+2002: UNION ALL
+2003: SELECT chart_id, at_auditor_id as auditor_id, chart_status, allocated_at FROM at_audit_allocations
+2004: ) c
+2005: ON c.auditor_id = u.user_employee_id
+2006: 
+2007: {coding_join_sql}
+2008: 
+------------------------------
+--- UNION ALL at line 2002 ---
+1992: MAX(c.allocated_at) AS last_chart_date
+1993: 
+1994: FROM user_details u
+1995: 
+1996: LEFT JOIN user_details tl
+1997: ON tl.user_employee_id = u.tl_employee_id
+1998: 
+1999: -- UNION ALL for audit_allocations + at_audit_allocations
+2000: LEFT JOIN (
+2001: SELECT chart_id, auditor_id, chart_status, allocated_at FROM audit_allocations
+2002: UNION ALL
+2003: SELECT chart_id, at_auditor_id as auditor_id, chart_status, allocated_at FROM at_audit_allocations
+2004: ) c
+2005: ON c.auditor_id = u.user_employee_id
+2006: 
+2007: {coding_join_sql}
+2008: 
+2009: -- UNION ALL for codings + audit_allocations (as requested)
+2010: LEFT JOIN (
+2011: SELECT chart_id, project_pdf_id FROM codings
+------------------------------
+--- UNION ALL at line 2009 ---
+1999: -- UNION ALL for audit_allocations + at_audit_allocations
+2000: LEFT JOIN (
+2001: SELECT chart_id, auditor_id, chart_status, allocated_at FROM audit_allocations
+2002: UNION ALL
+2003: SELECT chart_id, at_auditor_id as auditor_id, chart_status, allocated_at FROM at_audit_allocations
+2004: ) c
+2005: ON c.auditor_id = u.user_employee_id
+2006: 
+2007: {coding_join_sql}
+2008: 
+2009: -- UNION ALL for codings + audit_allocations (as requested)
+2010: LEFT JOIN (
+2011: SELECT chart_id, project_pdf_id FROM codings
+2012: UNION ALL
+2013: SELECT aa.chart_id, c.project_pdf_id FROM audit_allocations aa LEFT JOIN codings c ON c.chart_id = aa.chart_id
+2014: ) co
+2015: ON co.chart_id = c.chart_id
+2016: 
+2017: LEFT JOIN project_pdfs p
+2018: ON p.id = co.project_pdf_id
+------------------------------
+--- UNION ALL at line 2012 ---
+2002: UNION ALL
+2003: SELECT chart_id, at_auditor_id as auditor_id, chart_status, allocated_at FROM at_audit_allocations
+2004: ) c
+2005: ON c.auditor_id = u.user_employee_id
+2006: 
+2007: {coding_join_sql}
+2008: 
+2009: -- UNION ALL for codings + audit_allocations (as requested)
+2010: LEFT JOIN (
+2011: SELECT chart_id, project_pdf_id FROM codings
+2012: UNION ALL
+2013: SELECT aa.chart_id, c.project_pdf_id FROM audit_allocations aa LEFT JOIN codings c ON c.chart_id = aa.chart_id
+2014: ) co
+2015: ON co.chart_id = c.chart_id
+2016: 
+2017: LEFT JOIN project_pdfs p
+2018: ON p.id = co.project_pdf_id
+2019: 
+2020: -- Subquery with UNION ALL for dx + errors
+2021: LEFT JOIN (
+------------------------------
+--- UNION ALL at line 2020 ---
+2010: LEFT JOIN (
+2011: SELECT chart_id, project_pdf_id FROM codings
+2012: UNION ALL
+2013: SELECT aa.chart_id, c.project_pdf_id FROM audit_allocations aa LEFT JOIN codings c ON c.chart_id = aa.chart_id
+2014: ) co
+2015: ON co.chart_id = c.chart_id
+2016: 
+2017: LEFT JOIN project_pdfs p
+2018: ON p.id = co.project_pdf_id
+2019: 
+2020: -- Subquery with UNION ALL for dx + errors
+2021: LEFT JOIN (
+2022: SELECT
+2023: adx.chart_id,
+2024: COUNT(DISTINCT adx.from_date) AS total_dos,
+2025: COUNT(adx.dxcode) AS total_icd,
+2026: (
+2027: SELECT COUNT(*)
+2028: FROM (
+2029: SELECT chart_id FROM audit_errors
+------------------------------
+--- UNION ALL at line 2030 ---
+2020: -- Subquery with UNION ALL for dx + errors
+2021: LEFT JOIN (
+2022: SELECT
+2023: adx.chart_id,
+2024: COUNT(DISTINCT adx.from_date) AS total_dos,
+2025: COUNT(adx.dxcode) AS total_icd,
+2026: (
+2027: SELECT COUNT(*)
+2028: FROM (
+2029: SELECT chart_id FROM audit_errors
+2030: UNION ALL
+2031: SELECT chart_id FROM at_audit_errors
+2032: ) err
+2033: WHERE err.chart_id = adx.chart_id
+2034: ) AS total_errors
+2035: FROM (
+2036: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2037: UNION ALL
+2038: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2039: ) adx
+------------------------------
+--- UNION ALL at line 2037 ---
+2027: SELECT COUNT(*)
+2028: FROM (
+2029: SELECT chart_id FROM audit_errors
+2030: UNION ALL
+2031: SELECT chart_id FROM at_audit_errors
+2032: ) err
+2033: WHERE err.chart_id = adx.chart_id
+2034: ) AS total_errors
+2035: FROM (
+2036: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2037: UNION ALL
+2038: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2039: ) adx
+2040: GROUP BY adx.chart_id
+2041: ) chart_stats
+2042: ON chart_stats.chart_id = c.chart_id
+2043: 
+2044: WHERE {where_clause}
+2045: 
+2046: GROUP BY
+------------------------------
+--- UNION ALL at line 2218 ---
+2208: COUNT(DISTINCT CASE
+2209: WHEN c_summ.chart_status = 'reject'
+2210: THEN c_summ.chart_id
+2211: END) AS rejected_charts,
+2212: 
+2213: -- TOTAL DOS (DX UNION)
+2214: (
+2215: SELECT COUNT(DISTINCT dx.from_date)
+2216: FROM (
+2217: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2218: UNION ALL
+2219: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2220: ) dx
+2221: JOIN (
+2222: SELECT chart_id, auditor_id, project, subproject, allocated_at FROM audit_allocations
+2223: UNION ALL
+2224: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at FROM at_audit_allocations
+2225: ) c2 ON c2.chart_id = dx.chart_id
+2226: WHERE c2.auditor_id = u.user_employee_id
+2227: {summary_join_sql.replace('c_summ.', 'c2.')}
+------------------------------
+--- UNION ALL at line 2223 ---
+2213: -- TOTAL DOS (DX UNION)
+2214: (
+2215: SELECT COUNT(DISTINCT dx.from_date)
+2216: FROM (
+2217: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2218: UNION ALL
+2219: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2220: ) dx
+2221: JOIN (
+2222: SELECT chart_id, auditor_id, project, subproject, allocated_at FROM audit_allocations
+2223: UNION ALL
+2224: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at FROM at_audit_allocations
+2225: ) c2 ON c2.chart_id = dx.chart_id
+2226: WHERE c2.auditor_id = u.user_employee_id
+2227: {summary_join_sql.replace('c_summ.', 'c2.')}
+2228: ) AS total_dos,
+2229: 
+2230: -- TOTAL ICD (DX UNION)
+2231: (
+2232: SELECT COUNT(dx.dxcode)
+------------------------------
+--- UNION ALL at line 2235 ---
+2225: ) c2 ON c2.chart_id = dx.chart_id
+2226: WHERE c2.auditor_id = u.user_employee_id
+2227: {summary_join_sql.replace('c_summ.', 'c2.')}
+2228: ) AS total_dos,
+2229: 
+2230: -- TOTAL ICD (DX UNION)
+2231: (
+2232: SELECT COUNT(dx.dxcode)
+2233: FROM (
+2234: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2235: UNION ALL
+2236: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2237: ) dx
+2238: JOIN (
+2239: SELECT chart_id, auditor_id, project, subproject, allocated_at FROM audit_allocations
+2240: UNION ALL
+2241: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at FROM at_audit_allocations
+2242: ) c2 ON c2.chart_id = dx.chart_id
+2243: WHERE c2.auditor_id = u.user_employee_id
+2244: {summary_join_sql.replace('c_summ.', 'c2.')}
+------------------------------
+--- UNION ALL at line 2240 ---
+2230: -- TOTAL ICD (DX UNION)
+2231: (
+2232: SELECT COUNT(dx.dxcode)
+2233: FROM (
+2234: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2235: UNION ALL
+2236: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2237: ) dx
+2238: JOIN (
+2239: SELECT chart_id, auditor_id, project, subproject, allocated_at FROM audit_allocations
+2240: UNION ALL
+2241: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at FROM at_audit_allocations
+2242: ) c2 ON c2.chart_id = dx.chart_id
+2243: WHERE c2.auditor_id = u.user_employee_id
+2244: {summary_join_sql.replace('c_summ.', 'c2.')}
+2245: AND dx.dxcode IS NOT NULL
+2246: AND dx.dxcode != ''
+2247: ) AS total_icd,
+2248: 
+2249: COALESCE(SUM(p_summ.page_count), 0) AS total_pages_sum,
+------------------------------
+--- UNION ALL at line 2260 ---
+2250: MAX(c_summ.allocated_at) AS last_chart_date
+2251: 
+2252: FROM user_details u
+2253: 
+2254: LEFT JOIN user_details tl
+2255: ON tl.user_employee_id = u.tl_employee_id
+2256: 
+2257: -- audit_allocations + at_audit_allocations
+2258: LEFT JOIN (
+2259: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+2260: UNION ALL
+2261: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+2262: ) c_summ
+2263: ON c_summ.auditor_id = u.user_employee_id
+2264: {summary_join_sql}
+2265: 
+2266: -- codings + audit_allocations (as requested)
+2267: LEFT JOIN (
+2268: SELECT chart_id, project_pdf_id, user_id FROM codings
+2269: UNION ALL
+------------------------------
+--- UNION ALL at line 2269 ---
+2259: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+2260: UNION ALL
+2261: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+2262: ) c_summ
+2263: ON c_summ.auditor_id = u.user_employee_id
+2264: {summary_join_sql}
+2265: 
+2266: -- codings + audit_allocations (as requested)
+2267: LEFT JOIN (
+2268: SELECT chart_id, project_pdf_id, user_id FROM codings
+2269: UNION ALL
+2270: SELECT aa.chart_id, c.project_pdf_id, aa.auditor_id as user_id FROM audit_allocations aa LEFT JOIN codings c ON c.chart_id = aa.chart_id
+2271: ) co_summ
+2272: ON co_summ.chart_id = c_summ.chart_id
+2273: 
+2274: LEFT JOIN project_pdfs p_summ
+2275: ON p_summ.id = co_summ.project_pdf_id
+2276: 
+2277: WHERE {" AND ".join(user_where)}
+2278: 
+------------------------------
+--- UNION ALL at line 2320 ---
+2310: SELECT
+2311: c.chart_id,
+2312: c.project,
+2313: c.subproject,
+2314: 
+2315: -- DOS (DX UNION)
+2316: (
+2317: SELECT COUNT(DISTINCT dx.from_date)
+2318: FROM (
+2319: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2320: UNION ALL
+2321: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2322: ) dx
+2323: WHERE dx.chart_id = c.chart_id
+2324: AND dx.from_date IS NOT NULL
+2325: ) AS total_dos,
+2326: 
+2327: -- ICD (DX UNION)
+2328: (
+2329: SELECT COUNT(dx.dxcode)
+------------------------------
+--- UNION ALL at line 2332 ---
+2322: ) dx
+2323: WHERE dx.chart_id = c.chart_id
+2324: AND dx.from_date IS NOT NULL
+2325: ) AS total_dos,
+2326: 
+2327: -- ICD (DX UNION)
+2328: (
+2329: SELECT COUNT(dx.dxcode)
+2330: FROM (
+2331: SELECT chart_id, from_date, dxcode FROM audit_dx_entries
+2332: UNION ALL
+2333: SELECT chart_id, from_date, dxcode FROM at_audit_dx_entries
+2334: ) dx
+2335: WHERE dx.chart_id = c.chart_id
+2336: AND dx.dxcode IS NOT NULL
+2337: AND dx.dxcode != ''
+2338: ) AS total_icd,
+2339: 
+2340: -- ERRORS (UNION)
+2341: (
+------------------------------
+--- UNION ALL at line 2345 ---
+2335: WHERE dx.chart_id = c.chart_id
+2336: AND dx.dxcode IS NOT NULL
+2337: AND dx.dxcode != ''
+2338: ) AS total_icd,
+2339: 
+2340: -- ERRORS (UNION)
+2341: (
+2342: SELECT COUNT(*)
+2343: FROM (
+2344: SELECT chart_id FROM audit_errors
+2345: UNION ALL
+2346: SELECT chart_id FROM at_audit_errors
+2347: ) err
+2348: WHERE err.chart_id = c.chart_id
+2349: ) AS total_errors,
+2350: 
+2351: ea.error_count,
+2352: ea.error_types,
+2353: ea.error_commands,
+2354: 
+------------------------------
+--- UNION ALL at line 2379 ---
+2369: tl_coder.username AS coder_tl,
+2370: 
+2371: c.allocated_at,
+2372: c.start_time,
+2373: c.end_time,
+2374: DATEDIFF(SECOND, c.start_time, c.end_time) AS seconds_taken
+2375: 
+2376: -- audit_allocations + at_audit_allocations
+2377: FROM (
+2378: SELECT chart_id, auditor_id, project, subproject, allocated_at, start_time, end_time, chart_status, reject_reason, reject_command, complete_command FROM audit_allocations
+2379: UNION ALL
+2380: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, start_time, end_time, chart_status, reject_reason, reject_command, complete_command FROM at_audit_allocations
+2381: ) c
+2382: 
+2383: JOIN user_details u
+2384: ON u.user_employee_id = c.auditor_id
+2385: 
+2386: LEFT JOIN user_details tl
+2387: ON tl.user_employee_id = u.tl_employee_id
+2388: 
+------------------------------
+--- UNION ALL at line 2392 ---
+2382: 
+2383: JOIN user_details u
+2384: ON u.user_employee_id = c.auditor_id
+2385: 
+2386: LEFT JOIN user_details tl
+2387: ON tl.user_employee_id = u.tl_employee_id
+2388: 
+2389: -- codings + audit_allocations (as requested)
+2390: LEFT JOIN (
+2391: SELECT dd.chart_id, dd.project_pdf_id, dd.user_id, f.start_page, f.end_page FROM codings dd LEFT JOIN dx_entries f ON f.chart_id = dd.chart_id
+2392: UNION ALL
+2393: SELECT
+2394: aa.chart_id,
+2395: c.project_pdf_id,
+2396: aa.auditor_id AS user_id,
+2397: f.start_page,
+2398: f.end_page
+2399: FROM audit_allocations aa
+2400: LEFT JOIN codings c ON c.chart_id = aa.chart_id
+2401: LEFT JOIN audit_dx_entries f ON f.chart_id = aa.chart_id
+------------------------------
+--- UNION ALL at line 2423 ---
+2413: 
+2414: -- error aggregation (audit_errors + at_audit_errors)
+2415: LEFT JOIN (
+2416: SELECT
+2417: t1.chart_id,
+2418: SUM(t1.error_count) as error_count,
+2419: STUFF((
+2420: SELECT ', ' + error_type
+2421: FROM (
+2422: SELECT chart_id, error_type, error_command FROM audit_errors
+2423: UNION ALL
+2424: SELECT chart_id, error_type, error_command FROM at_audit_errors
+2425: ) t2
+2426: WHERE t2.chart_id = t1.chart_id
+2427: FOR XML PATH('')
+2428: ), 1, 2, '') as error_types,
+2429: STUFF((
+2430: SELECT ', ' + error_command
+2431: FROM (
+2432: SELECT chart_id, error_type, error_command FROM audit_errors
+------------------------------
+--- UNION ALL at line 2433 ---
+2423: UNION ALL
+2424: SELECT chart_id, error_type, error_command FROM at_audit_errors
+2425: ) t2
+2426: WHERE t2.chart_id = t1.chart_id
+2427: FOR XML PATH('')
+2428: ), 1, 2, '') as error_types,
+2429: STUFF((
+2430: SELECT ', ' + error_command
+2431: FROM (
+2432: SELECT chart_id, error_type, error_command FROM audit_errors
+2433: UNION ALL
+2434: SELECT chart_id, error_type, error_command FROM at_audit_errors
+2435: ) t3
+2436: WHERE t3.chart_id = t1.chart_id
+2437: FOR XML PATH('')
+2438: ), 1, 2, '') as error_commands
+2439: FROM (
+2440: SELECT chart_id, error_count FROM audit_errors
+2441: UNION ALL
+2442: SELECT chart_id, error_count FROM at_audit_errors
+------------------------------
+--- UNION ALL at line 2441 ---
+2431: FROM (
+2432: SELECT chart_id, error_type, error_command FROM audit_errors
+2433: UNION ALL
+2434: SELECT chart_id, error_type, error_command FROM at_audit_errors
+2435: ) t3
+2436: WHERE t3.chart_id = t1.chart_id
+2437: FOR XML PATH('')
+2438: ), 1, 2, '') as error_commands
+2439: FROM (
+2440: SELECT chart_id, error_count FROM audit_errors
+2441: UNION ALL
+2442: SELECT chart_id, error_count FROM at_audit_errors
+2443: ) t1
+2444: GROUP BY t1.chart_id
+2445: ) ea
+2446: ON ea.chart_id = c.chart_id
+2447: 
+2448: WHERE {where_clause}
+2449: 
+2450: ORDER BY c.allocated_at DESC
+------------------------------
+--- UNION ALL at line 2693 ---
+2683: where_params.append(from_date)
+2684: if to_date:
+2685: where_parts.append("aa.allocated_at <= DATEADD(day, 1, CAST(%s AS DATE))")
+2686: where_params.append(to_date)
+2687: 
+2688: where_clause = " AND ".join(where_parts)
+2689: 
+2690: sql = f"""
+2691: ;WITH Allocations AS (
+2692: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+2693: UNION ALL
+2694: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+2695: ),
+2696: CodingsUnion AS (
+2697: SELECT chart_id, user_id, project, subproject, project_pdf_id
+2698: FROM (
+2699: SELECT chart_id, user_id, project, subproject, project_pdf_id,
+2700: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+2701: FROM codings
+2702: ) t WHERE rn = 1
+------------------------------
+--- UNION ALL at line 2706 ---
+2696: CodingsUnion AS (
+2697: SELECT chart_id, user_id, project, subproject, project_pdf_id
+2698: FROM (
+2699: SELECT chart_id, user_id, project, subproject, project_pdf_id,
+2700: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+2701: FROM codings
+2702: ) t WHERE rn = 1
+2703: ),
+2704: DXUnion AS (
+2705: SELECT id, chart_id, from_date, dxcode FROM audit_dx_entries
+2706: UNION ALL
+2707: SELECT id, chart_id, from_date, dxcode FROM at_audit_dx_entries
+2708: ),
+2709: ErrorUnion AS (
+2710: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+2711: UNION ALL
+2712: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+2713: ),
+2714: 
+2715: BaseAudit AS (
+------------------------------
+--- UNION ALL at line 2711 ---
+2701: FROM codings
+2702: ) t WHERE rn = 1
+2703: ),
+2704: DXUnion AS (
+2705: SELECT id, chart_id, from_date, dxcode FROM audit_dx_entries
+2706: UNION ALL
+2707: SELECT id, chart_id, from_date, dxcode FROM at_audit_dx_entries
+2708: ),
+2709: ErrorUnion AS (
+2710: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+2711: UNION ALL
+2712: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+2713: ),
+2714: 
+2715: BaseAudit AS (
+2716: SELECT
+2717: u.user_employee_id,
+2718: u.username,
+2719: u.user_mail_id as email_id,
+2720: tl.username as tl_name,
+------------------------------
+--- UNION ALL at line 2935 ---
+2925: if to_date:
+2926: where_parts.append("aa.allocated_at <= DATEADD(day, 1, CAST(%s AS DATE))")
+2927: where_params.append(to_date)
+2928: 
+2929: where_clause = " AND ".join(where_parts)
+2930: 
+2931: # --- SHEET 1: Summary ---
+2932: summary_sql = f"""
+2933: ;WITH Allocations AS (
+2934: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+2935: UNION ALL
+2936: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+2937: ),
+2938: CodingsUnion AS (
+2939: SELECT chart_id, user_id, project, subproject, project_pdf_id
+2940: FROM (
+2941: SELECT chart_id, user_id, project, subproject, project_pdf_id,
+2942: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+2943: FROM codings
+2944: ) t WHERE rn = 1
+------------------------------
+--- UNION ALL at line 2948 ---
+2938: CodingsUnion AS (
+2939: SELECT chart_id, user_id, project, subproject, project_pdf_id
+2940: FROM (
+2941: SELECT chart_id, user_id, project, subproject, project_pdf_id,
+2942: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+2943: FROM codings
+2944: ) t WHERE rn = 1
+2945: ),
+2946: DXUnion AS (
+2947: SELECT id, chart_id, from_date, dxcode FROM audit_dx_entries
+2948: UNION ALL
+2949: SELECT id, chart_id, from_date, dxcode FROM at_audit_dx_entries
+2950: ),
+2951: ErrorUnion AS (
+2952: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+2953: UNION ALL
+2954: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+2955: ),
+2956: 
+2957: BaseAudit AS (
+------------------------------
+--- UNION ALL at line 2953 ---
+2943: FROM codings
+2944: ) t WHERE rn = 1
+2945: ),
+2946: DXUnion AS (
+2947: SELECT id, chart_id, from_date, dxcode FROM audit_dx_entries
+2948: UNION ALL
+2949: SELECT id, chart_id, from_date, dxcode FROM at_audit_dx_entries
+2950: ),
+2951: ErrorUnion AS (
+2952: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+2953: UNION ALL
+2954: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+2955: ),
+2956: 
+2957: BaseAudit AS (
+2958: SELECT
+2959: u.user_employee_id,
+2960: u.username,
+2961: u.user_mail_id,
+2962: tl.username as tl_name,
+------------------------------
+--- UNION ALL at line 3037 ---
+3027: AND err.project = aa_final.project
+3028: AND err.subproject = aa_final.subproject
+3029: AND err.activity_date_val = aa_final.activity_date_val
+3030: ORDER BY aa_final.activity_date_val DESC, u.username
+3031: """
+3032: 
+3033: # --- SHEET 2: Audit data ---
+3034: audit_sql = f"""
+3035: ;WITH Allocations AS (
+3036: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+3037: UNION ALL
+3038: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+3039: ),
+3040: CodingsUnion AS (
+3041: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at
+3042: FROM (
+3043: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at,
+3044: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+3045: FROM codings
+3046: ) t WHERE rn = 1
+------------------------------
+--- UNION ALL at line 3050 ---
+3040: CodingsUnion AS (
+3041: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at
+3042: FROM (
+3043: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at,
+3044: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+3045: FROM codings
+3046: ) t WHERE rn = 1
+3047: ),
+3048: DXUnion AS (
+3049: SELECT id, chart_id, from_date, dxcode, dx_location, CAST(NULL AS DATETIME) as created_at FROM audit_dx_entries
+3050: UNION ALL
+3051: SELECT id, chart_id, from_date, dxcode, dx_location, created_at FROM at_audit_dx_entries
+3052: ),
+3053: ErrorUnion AS (
+3054: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+3055: UNION ALL
+3056: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+3057: )
+3058: 
+3059: SELECT
+------------------------------
+--- UNION ALL at line 3055 ---
+3045: FROM codings
+3046: ) t WHERE rn = 1
+3047: ),
+3048: DXUnion AS (
+3049: SELECT id, chart_id, from_date, dxcode, dx_location, CAST(NULL AS DATETIME) as created_at FROM audit_dx_entries
+3050: UNION ALL
+3051: SELECT id, chart_id, from_date, dxcode, dx_location, created_at FROM at_audit_dx_entries
+3052: ),
+3053: ErrorUnion AS (
+3054: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+3055: UNION ALL
+3056: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+3057: )
+3058: 
+3059: SELECT
+3060: c.chart_id as [Chart ID],
+3061: c.project as [Project Name],
+3062: c.subproject as [Sub Project Name],
+3063: COALESCE((SELECT MAX(dx_dt.created_at) FROM DXUnion dx_dt WHERE dx_dt.chart_id = c.chart_id),
+3064: c.from_date, c.created_at) as [Coded Date],
+------------------------------
+--- UNION ALL at line 3099 ---
+3089: LEFT JOIN user_details tl ON tl.user_employee_id = u.tl_employee_id
+3090: LEFT JOIN user_details manage ON manage.user_employee_id = u.tl_employee_id
+3091: WHERE {where_clause}
+3092: AND (aa.chart_status = 'complete' OR aa.chart_status = 'reject')
+3093: """
+3094: 
+3095: # --- SHEET 3: Error Log ---
+3096: error_sql = f"""
+3097: ;WITH Allocations AS (
+3098: SELECT chart_id, auditor_id, project, subproject, allocated_at, chart_status, end_time FROM audit_allocations
+3099: UNION ALL
+3100: SELECT chart_id, at_auditor_id as auditor_id, project, subproject, allocated_at, chart_status, end_time FROM at_audit_allocations
+3101: ),
+3102: CodingsUnion AS (
+3103: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at
+3104: FROM (
+3105: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at,
+3106: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+3107: FROM codings
+3108: ) t WHERE rn = 1
+------------------------------
+--- UNION ALL at line 3112 ---
+3102: CodingsUnion AS (
+3103: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at
+3104: FROM (
+3105: SELECT chart_id, user_id, project, subproject, project_pdf_id, from_date, created_at,
+3106: ROW_NUMBER() OVER(PARTITION BY chart_id ORDER BY id) as rn
+3107: FROM codings
+3108: ) t WHERE rn = 1
+3109: ),
+3110: DXUnion AS (
+3111: SELECT id, chart_id, from_date, dxcode, dx_location, CAST(NULL AS DATETIME) as created_at FROM audit_dx_entries
+3112: UNION ALL
+3113: SELECT id, chart_id, from_date, dxcode, dx_location, created_at FROM at_audit_dx_entries
+3114: ),
+3115: ErrorUnion AS (
+3116: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+3117: UNION ALL
+3118: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+3119: )
+3120: 
+3121: SELECT
+------------------------------
+--- UNION ALL at line 3117 ---
+3107: FROM codings
+3108: ) t WHERE rn = 1
+3109: ),
+3110: DXUnion AS (
+3111: SELECT id, chart_id, from_date, dxcode, dx_location, CAST(NULL AS DATETIME) as created_at FROM audit_dx_entries
+3112: UNION ALL
+3113: SELECT id, chart_id, from_date, dxcode, dx_location, created_at FROM at_audit_dx_entries
+3114: ),
+3115: ErrorUnion AS (
+3116: SELECT chart_id, error_type, error_count, error_command, row_id FROM audit_errors
+3117: UNION ALL
+3118: SELECT chart_id, error_type, error_count, error_command, row_id FROM at_audit_errors
+3119: )
+3120: 
+3121: SELECT
+3122: ae.chart_id as [Chart ID],
+3123: c.project as [Project Name],
+3124: c.subproject as [Sub Project Name],
+3125: adx.dx_location as [Error Location],
+3126: adx.dxcode as [Dx Code],
+------------------------------

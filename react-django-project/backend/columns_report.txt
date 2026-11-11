@@ -1,0 +1,21 @@
+Table: codings
+Columns: id, chart_id, project, subproject, from_date, to_date, start_page, end_page, eo, chart_status, reject_reason, reject_command, date, start_time, end_time, user_id, pdf_path, provider, dxcode, details, complete_command, pdf_path_hash, project_pdf_id, created_at
+
+Table: audit_allocations
+Columns: id, chart_id, project, subproject, auditor_id, allocated_at, chart_status, reject_reason, reject_command, complete_command, start_time, end_time
+
+Table: at_audit_allocations
+Columns: id, chart_id, project, subproject, at_auditor_id, allocated_at, start_time, end_time, chart_status, reject_reason, reject_command, complete_command
+
+Table: audit_dx_entries
+Columns: id, chart_id, from_date, to_date, start_page, end_page, dxcode, details, provider, eo, pos, dx_location, meat_dec, error_type, error_count, error_command, state, user_action, parent_id
+
+Table: at_audit_dx_entries
+Columns: id, chart_id, from_date, to_date, start_page, end_page, dxcode, details, provider, eo, error_type, error_command, created_at, dx_location, pos, parent_id, user_action, user_action_command, user_tl_action, user_tl_action_command, audit_tl_action, audit_tl_action_command, error_count, meat_dec
+
+Table: audit_errors
+Columns: id, chart_id, row_id, error_type, error_count, error_command, changes, created_at
+
+Table: at_audit_errors
+Columns: id, chart_id, row_id, error_type, error_count, error_command, changes, created_at
+

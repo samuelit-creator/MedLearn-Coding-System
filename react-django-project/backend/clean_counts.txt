@@ -1,0 +1,3 @@
+--- AUDIT ERRORS STATS ---
+Total audit_errors: 12220
+Unique row_ids in audit_errors: 10221

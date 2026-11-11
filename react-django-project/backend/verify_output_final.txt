@@ -1,0 +1,4 @@
+--- Verifying audit_open_chart_api for chart_id 20659705 ---
+Status Code: 200
+Success: API returned 200 OK
+Response Data Keys: dict_keys(['chart_id', 'pdf_path', 'rows', 'coder_rows', 'audit_log', 'errors', 'at_audit_log', 'reject_command', 'reject_reason', 'project', 'subproject', 'audit_status'])
